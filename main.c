@@ -121,7 +121,6 @@ int main( void )
 
 	/* CREATE THE QUEUE */
 	msg_queue = xQueueCreate( msg_queue_len, sizeof( message * ) );
-	#if 1
    /* Create Tasks here */
 	xTaskPeriodicCreate(task_1,
 							"Button_1_Monitor",
@@ -169,59 +168,7 @@ int main( void )
 							(void *) 0,
 								2,
 							&task_6_handle,
-							100);							
-							#endif
-							#if 0
-							xTaskCreate(task_1,
-							"Button_1_Monitor",
-							100,
-							(void *) 0,
-								2,
-							&task_1_handle
-							);
-					
-	xTaskCreate(task_2,
-							"Button_2_Monitor",
-							100,
-							(void *) 0,
-								2,
-							&task_2_handle
-							);		
-							
-	xTaskCreate(task_3,
-							"Periodic_Transmitter",
-							100,
-							(void *) 0,
-								2,
-							&task_3_handle
-							);
-							
-	xTaskCreate(task_4,
-							"Uart_Receiver",
-							100,
-							(void *) 0,
-								2,
-							&task_4_handle
-							);
-							
-		xTaskCreate(task_5,
-							"Load_1_Simulation",
-							100,
-							(void *) 0,
-								2,
-							&task_5_handle
-							);
-							
-	xTaskCreate(task_6,
-							"Load_2_Simulation",
-							100,
-							(void *) 0,
-								2,
-							&task_6_handle
-					);
-#endif							
-
-														
+							100);																	
 	/* Now all the tasks have been started - start the scheduler.
 	NOTE : Tasks run in system mode and the scheduler runs in Supervisor mode.
 	The processor MUST be in supervisor mode when vTaskStartScheduler is 
