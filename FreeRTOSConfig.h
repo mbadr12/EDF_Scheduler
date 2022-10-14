@@ -76,6 +76,91 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
 
+/* TRACE HOOKS */
+#include "GPIO.h"
+extern int task_1_in, task_2_in, task_3_in, task_4_in, task_5_in, task_6_in;
+extern int task_1_out, task_2_out, task_3_out, task_4_out, task_5_out, task_6_out;
+extern int task_1_total, task_2_total, task_3_total, task_4_total, task_5_total, task_6_total;
+extern int total_sys_time, cpu_load;
+
+#define traceTASK_SWITCHED_IN()\
+do\
+{\
+	switch((int)pxCurrentTCB->pxTaskTag)\
+	{\
+		case 0:\
+			GPIO_write(PORT_0, PIN7, PIN_IS_HIGH);\
+			break;\
+		case 1:\
+			task_1_in = T1TC;\
+			GPIO_write(PORT_0, PIN1, PIN_IS_HIGH);\
+			break;\
+		case 2:\
+			task_2_in = T1TC;\
+			GPIO_write(PORT_0, PIN2, PIN_IS_HIGH);\
+			break;\
+		case 3:\
+			task_3_in = T1TC;\
+			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);\
+			break;\
+		case 4:\
+			task_4_in = T1TC;\
+			GPIO_write(PORT_0, PIN4, PIN_IS_HIGH);\
+			break;\
+		case 5:\
+			task_5_in = T1TC;\
+			GPIO_write(PORT_0, PIN5, PIN_IS_HIGH);\
+			break;\
+		case 6:\
+			task_6_in = T1TC;\
+			GPIO_write(PORT_0, PIN6, PIN_IS_HIGH);\
+			break;\
+	}\
+}while(0)
+
+
+#define traceTASK_SWITCHED_OUT()\
+do\
+{\
+	switch((int)pxCurrentTCB->pxTaskTag)\
+	{\
+		case 0:\
+			GPIO_write(PORT_0, PIN7, PIN_IS_LOW);\
+			break;\
+		case 1:\
+			task_1_out = T1TC;\
+			task_1_total += task_1_out - task_1_in;\
+			GPIO_write(PORT_0, PIN1, PIN_IS_LOW);\
+			break;\
+		case 2:\
+			task_2_out = T1TC;\
+			task_2_total += task_2_out - task_2_in;\
+			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);\
+			break;\
+		case 3:\
+			task_3_out = T1TC;\
+			task_3_total += task_3_out - task_3_in;\
+			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);\
+			break;\
+		case 4:\
+			task_4_out = T1TC;\
+			task_4_total += task_4_out - task_4_in;\
+			GPIO_write(PORT_0, PIN4, PIN_IS_LOW);\
+			break;\
+		case 5:\
+			task_5_out = T1TC;\
+			task_5_total += task_5_out - task_5_in;\
+			GPIO_write(PORT_0, PIN5, PIN_IS_LOW);\
+			break;\
+		case 6:\
+			task_6_out = T1TC;\
+			task_6_total += task_6_out - task_6_in;\
+			GPIO_write(PORT_0, PIN6, PIN_IS_LOW);\
+			break;\
+	}\
+	total_sys_time = T1TC;\
+	cpu_load = (task_1_total+task_2_total+task_3_total+task_4_total+task_5_total+task_6_total)/ (double)total_sys_time * 100;\
+}while(0)
 
 
 #endif /* FREERTOS_CONFIG_H */
